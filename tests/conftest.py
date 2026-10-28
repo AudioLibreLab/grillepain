@@ -39,3 +39,28 @@ def bars(bars_bc):
 @pytest.fixture
 def bc(bars_bc):
     return bars_bc[1]
+
+
+def _make_result(al: Alignment, bc, bars):
+    from dataclasses import replace  # noqa: F401
+    from grillepain import form, metrics
+    from grillepain.notes import Note
+    from grillepain.result import Result
+    notes = [Note(1.0 + 0.5 * i, 0.4, [60, 63, 65, 67, 70][i % 5], -10.0) for i in range(16)]
+    placed = form.place_notes(notes, al, bc, 4)
+    m = metrics.compute(placed, al, bc, bars, 4)
+    return Result(
+        input={"file": "x.mkv", "guitar_track": "guitare", "backing_track": "backing"},
+        tune={"name": None, "grid": C_JAM_BLUES, "meter": "4/4", "bars": len(bars)},
+        alignment=al, metrics=m, notes=placed, warnings=[])
+
+
+@pytest.fixture
+def sample_result(al, bc, bars):
+    return _make_result(al, bc, bars)
+
+
+@pytest.fixture
+def sample_result_faible(al, bc, bars):
+    from dataclasses import replace
+    return _make_result(replace(al, confidence="faible"), bc, bars)

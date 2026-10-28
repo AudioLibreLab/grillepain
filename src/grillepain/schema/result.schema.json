@@ -1,0 +1,31 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "Résultat grillepain",
+ "type": "object",
+ "required": ["schema_version", "tool", "input", "tune", "alignment", "accuracy",
+              "glossary", "metrics", "notes", "warnings"],
+ "properties": {
+  "schema_version": {"const": "1.0.0"},
+  "tool": {"type": "object", "required": ["name", "version"],
+           "properties": {"name": {"type": "string"}, "version": {"type": "string"}}},
+  "input": {"type": "object", "required": ["file", "guitar_track", "backing_track"],
+            "properties": {"file": {"type": "string"}, "guitar_track": {"type": "string"},
+                           "backing_track": {"type": "string"}}},
+  "tune": {"type": "object", "required": ["name", "grid", "meter", "bars"],
+           "properties": {"name": {"type": ["string", "null"]}, "grid": {"type": "string"},
+                          "meter": {"type": "string"}, "bars": {"type": "integer"}}},
+  "alignment": {"type": "object", "required": ["bpm", "downbeat_s", "method", "confidence", "reliable"],
+                "properties": {"bpm": {"type": "number"}, "downbeat_s": {"type": "number"},
+                               "method": {"type": "string"}, "confidence": {"type": "string"},
+                               "reliable": {"type": "boolean"}}},
+  "accuracy": {"type": "object", "required": ["pitch", "timing_ms"],
+               "properties": {"pitch": {"type": "string"}, "timing_ms": {"type": "number"}}},
+  "glossary": {"type": "object", "additionalProperties": {"type": "string"}},
+  "metrics": {"type": "object"},
+  "notes": {"type": "array",
+            "items": {"type": "object",
+                      "required": ["t_s", "dur_s", "midi", "level_db", "chorus", "bar", "beat",
+                                   "chord", "name", "note", "function"]}},
+  "warnings": {"type": "array", "items": {"type": "string"}}
+ }
+}

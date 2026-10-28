@@ -1,8 +1,12 @@
 import librosa
 import numpy as np
+import pytest
 import synth
 
 
+# même avertissement tiers (numba/librosa, abs2) que dans notes.detect_notes ;
+# il dépend de l'état laissé par les tests précédents
+@pytest.mark.filterwarnings("ignore:invalid value encountered in cast:RuntimeWarning")
 def test_pluck_pitch():
     y = synth.pluck(60, 1.0)
     f0, *_ = librosa.pyin(y, fmin=75, fmax=1400, sr=22050)

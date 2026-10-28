@@ -67,7 +67,9 @@ def fit_form(backing, beat_frames, all_beats, beat_chords):
     yh = librosa.effects.harmonic(backing)
     ch = librosa.feature.chroma_cqt(y=yh, sr=SR, hop_length=hop)
     frames = librosa.time_to_frames(all_beats[all_beats >= 0], sr=SR, hop_length=hop)
-    cs = librosa.util.sync(ch, frames, aggregate=np.mean)
+    # pad=False : colonne i = temps i -> i+1 (pad=True ajoutait le segment avant le 1er temps,
+    # décalant tout d'un temps)
+    cs = librosa.util.sync(ch, frames, aggregate=np.mean, pad=False)
     cs = cs / (np.linalg.norm(cs, axis=0, keepdims=True) + 1e-9)
     L = len(beat_chords)
     T = np.zeros((L, 12))
@@ -75,7 +77,7 @@ def fit_form(backing, beat_frames, all_beats, beat_chords):
         for pc in c.tones:
             T[i, pc] = 1
     T /= np.linalg.norm(T, axis=1, keepdims=True)
-    nb = min(cs.shape[1], len(frames))
+    nb = cs.shape[1]  # len(frames) - 1 segments complets
     first = int(np.sum(all_beats < 0))
     scores = []
     for off in range(L):

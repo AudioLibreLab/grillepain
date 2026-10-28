@@ -6,8 +6,6 @@ Analyseur de solos de guitare jazz/blues enregistrés avec [JamCapture](https://
 notes jouées par accord, guide tones, notes d'arrivée, mise en place, et surtout
 « est-ce que je sens la grille ? ». Voir `info.md` pour les objectifs.
 
-Problème connu : le calage harmonique est décalé d'un temps (correction en cours).
-
 ## Installation
 
 Prérequis : [ffmpeg](https://ffmpeg.org/) et [uv](https://docs.astral.sh/uv/).

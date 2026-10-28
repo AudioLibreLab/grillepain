@@ -33,5 +33,6 @@ def test_empty_raises(al, bc, bars):
 
 @pytest.mark.golden
 def test_matches_prototype(example_mkv):
+    # temps 1 du prototype imposé : isole les métriques du calage harmonique (corrigé en Task 13)
     ref = json.loads(REF.read_text())
-    assert run_pipeline(example_mkv) == ref["results"]
+    assert run_pipeline(example_mkv, downbeat=ref["meta"]["downbeat_s"]) == ref["results"]

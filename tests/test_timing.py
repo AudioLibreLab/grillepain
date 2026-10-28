@@ -15,13 +15,13 @@ def test_count_in_downbeat():
     assert abs(a.downbeat_s - 2.0) < 0.05 and abs(a.bpm - 120) < 1
 
 
-@pytest.mark.xfail(strict=True, reason="bug du prototype : librosa.util.sync pad=True décale fit_form d'un temps — corrigé en Task 13")
 def test_harmonic_fit_without_count_in():
     y = synth.chord_backing(C_JAM_BLUES, bpm=120, beats_per_bar=4, start_s=1.0, choruses=3, count_in=False)
     _, beats = parse_grid(C_JAM_BLUES, 4)
     a = align(y, beats, bpm_hint=120, downbeat_s=None)
     assert a.method == "ajustement harmonique"
-    assert abs(a.downbeat_s - 1.0) < 0.02
+    # accrochage aux temps beat_track (trames de 23 ms) ; un temps de décalage = 0,5 s
+    assert abs(a.downbeat_s - 1.0) < 0.05
 
 
 def test_manual_downbeat():

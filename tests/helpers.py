@@ -9,14 +9,14 @@ from grillepain.result import Result
 from grillepain.theory import C_JAM_BLUES
 
 
-def run_result(mkv: Path) -> Result:
-    """Chaîne complète avec les défauts du prototype (sans --bpm ni --downbeat)."""
-    return pipeline.run(load_mkv(mkv), C_JAM_BLUES, 4, None, None, -40, Path(mkv).name)
+def run_result(mkv: Path, downbeat: float | None = None) -> Result:
+    """Chaîne complète avec les défauts du prototype (sans --bpm ; --downbeat optionnel)."""
+    return pipeline.run(load_mkv(mkv), C_JAM_BLUES, 4, None, downbeat, -40, Path(mkv).name)
 
 
-def run_pipeline(mkv: Path) -> dict:
+def run_pipeline(mkv: Path, downbeat: float | None = None) -> dict:
     """Chaîne complète -> métriques en dict JSON."""
-    return json.loads(json.dumps(run_result(mkv).metrics, default=float))
+    return json.loads(json.dumps(run_result(mkv, downbeat).metrics, default=float))
 
 
 def make_take(path: Path, count_in: bool = True, guitar_silent: bool = False) -> None:

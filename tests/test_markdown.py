@@ -18,7 +18,7 @@ def test_no_warning_when_reliable(sample_result):
 
 
 @pytest.mark.golden
-def test_identical_to_prototype(example_mkv):
+def test_identical_to_reference(example_mkv):
     md = render(run_result(example_mkv))
     ref = REF.read_text(encoding="utf-8")
 
@@ -26,5 +26,5 @@ def test_identical_to_prototype(example_mkv):
         return "\n".join(l for l in s.splitlines() if not l.startswith("**Attention :**"))
 
     a, b = strip(ref), strip(md)
-    diff = "\n".join(difflib.unified_diff(a.splitlines(), b.splitlines(), "prototype", "package", lineterm=""))
+    diff = "\n".join(difflib.unified_diff(a.splitlines(), b.splitlines(), "référence", "package", lineterm=""))
     assert a == b, diff

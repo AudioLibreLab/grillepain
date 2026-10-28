@@ -116,6 +116,14 @@ sections:             # optionnel, pour les métriques de forme
     fournies (une grille perso du même nom l'emporte) ;
   - `--tune ./ma-grille.yaml` : chemin direct vers un fichier YAML ;
   - `--grid "C7|F7|…"` : grille ad hoc en ligne de commande (4/4, sans intro).
+- **Import iReal Pro** : `grillepain tunes import <source>` convertit une grille iReal en
+  YAML dans `~/.config/grillepain/tunes/` (à relire/corriger ensuite). Sources acceptées :
+  lien `irealb://…` (partage ou export HTML d'une playlist, plusieurs morceaux possibles) et
+  export MusicXML. Points délicats : déchiffrement du format `irealb` (bibliothèque
+  `pyRealParser` si elle est fiable, sinon petit parseur maison testé), dépliage des
+  reprises, 1re/2e fins, codas et signes de répétition de mesure, normalisation des symboles
+  d'accords iReal (`-7`, `^7`, `h7`, `o7`…) vers `theory.py`. Mesure, tonalité et forme
+  dépliée sont reprises telles quelles ; l'intro et `sections` restent à compléter à la main.
 - Une grille invalide (accord inconnu, mesure vide, partage qui ne tombe pas juste) donne
   un message clair avec le numéro de mesure, code retour 2.
 - `grillepain tunes` liste les grilles disponibles.
@@ -253,6 +261,7 @@ concret et exercice), triées par écart à l'objectif. Exemple : guide tones < 
    comportement** (rapport identique sur la prise d'exemple) + premiers tests synthétiques.
 2. `Result` + JSON versionné + codes retour (branchement JamCapture possible).
 3. Grilles YAML (3 standards) + `grillepain tunes`.
+   Puis import iReal Pro (`grillepain tunes import`).
 4. **Boucle d'amélioration** : `grillepain eval` sur les vraies prises.
 5. Calage robuste : indices de basse et de cymbales, score de confiance, `grillepain check`, `--shift`.
 6. Métriques « sentir la grille » + `advice.py`.

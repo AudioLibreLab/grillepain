@@ -18,6 +18,7 @@ class Alignment:
     downbeat_s: float
     method: str
     confidence: str  # haute | bonne | moyenne | faible
+    method_id: str = "harmonic"  # clé machine : downbeat_arg | count_in | harmonic
 
     @property
     def reliable(self) -> bool:
@@ -96,23 +97,25 @@ def align(backing: np.ndarray, beat_chords: list[Chord], bpm_hint: float | None,
     if downbeat_s is not None and not 0 <= downbeat_s <= len(backing) / SR:
         raise UsageError(f"--downbeat {downbeat_s} hors de la durée du backing "
                          f"(0 à {len(backing) / SR:.1f} s).")
+    if bpm_hint is not None and bpm_hint <= 0:
+        raise UsageError(f"--bpm doit être positif (reçu : {bpm_hint}).")
     beats, frames, period = track_beats(backing, bpm_hint)
     bpm = 60 / period
 
     if downbeat_s is not None:
         idx = int(np.argmin(np.abs(beats - downbeat_s)))
-        method, conf = 'fourni (--downbeat)', 'haute'
+        method, method_id, conf = 'fourni (--downbeat)', 'downbeat_arg', 'haute'
     else:
         clicks, start = detect_count_in(backing, period)
         if start is not None:
             idx = int(np.argmin(np.abs(beats - start)))
-            method, conf = f'décompte détecté ({len(clicks)} clics)', 'haute'
+            method, method_id, conf = f'décompte détecté ({len(clicks)} clics)', 'count_in', 'haute'
         else:
             idx, margin = fit_form(backing, frames, beats, beat_chords)
-            method = 'ajustement harmonique'
+            method, method_id = 'ajustement harmonique', 'harmonic'
             conf = 'bonne' if margin > 2 else 'moyenne' if margin > 1 else 'faible'
     L = len(beat_chords)
     idx = idx % L  # 1er chorus = le plus tôt possible
     while idx - L >= 0 and beats[idx - L] >= 0:
         idx -= L
-    return Alignment(beats, period, bpm, idx, float(beats[idx]), method, conf)
+    return Alignment(beats, period, bpm, idx, float(beats[idx]), method, conf, method_id)

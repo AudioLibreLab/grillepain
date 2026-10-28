@@ -22,9 +22,5 @@ def test_identical_to_reference(example_mkv):
     md = render(run_result(example_mkv))
     ref = REF.read_text(encoding="utf-8")
 
-    def strip(s: str) -> str:
-        return "\n".join(l for l in s.splitlines() if not l.startswith("**Attention :**"))
-
-    a, b = strip(ref), strip(md)
-    diff = "\n".join(difflib.unified_diff(a.splitlines(), b.splitlines(), "référence", "package", lineterm=""))
-    assert a == b, diff
+    diff = "\n".join(difflib.unified_diff(ref.splitlines(), md.splitlines(), "référence", "package", lineterm=""))
+    assert ref == md, diff

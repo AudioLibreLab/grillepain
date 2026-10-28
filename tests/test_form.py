@@ -8,7 +8,7 @@ from grillepain.timing import Alignment
 
 def test_placement():
     beats = np.arange(0, 60, 0.5)
-    al = Alignment(beats_s=beats, period_s=0.5, bpm=120, downbeat_idx=2, downbeat_s=1.0, method="m", confidence="haute")
+    al = Alignment(beats_s=beats, period_s=0.5, bpm=120, downbeat_idx=2, downbeat_s=1.0, method="m", method_id="harmonic", confidence="haute")
     _, bc = parse_grid(C_JAM_BLUES, 4)
     notes = [Note(0.2, 0.2, 60, -10), Note(1.0, 0.3, 64, -10), Note(1.0 + 4 * 2 + 0.25, 0.3, 70, -10),
              Note(1.0 + 48 * 0.5, 0.3, 60, -10)]

@@ -26,3 +26,9 @@ def test_two_chords_in_3_4():
 def test_blues_grid():
     bars, beats = parse_grid(C_JAM_BLUES, 4)
     assert len(bars) == 12 and len(beats) == 48 and beats[42].sym == "A7"
+
+
+@pytest.mark.parametrize("grid,bpb", [("", 4), ("|", 4), ("C7|F7", 0), ("C7|F7", -1)])
+def test_bad_grid_or_meter(grid, bpb):
+    with pytest.raises(UsageError):
+        parse_grid(grid, bpb)

@@ -23,7 +23,7 @@ def example_mkv() -> Path:
 @pytest.fixture
 def al() -> Alignment:
     return Alignment(beats_s=np.arange(0, 60, 0.5), period_s=0.5, bpm=120, downbeat_idx=2,
-                     downbeat_s=1.0, method="m", confidence="haute")
+                     downbeat_s=1.0, method="m", method_id="harmonic", confidence="haute")
 
 
 @pytest.fixture
@@ -42,7 +42,6 @@ def bc(bars_bc):
 
 
 def _make_result(al: Alignment, bc, bars):
-    from dataclasses import replace  # noqa: F401
     from grillepain import form, metrics
     from grillepain.notes import Note
     from grillepain.result import Result

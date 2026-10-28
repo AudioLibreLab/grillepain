@@ -16,7 +16,7 @@ def run_result(mkv: Path, downbeat: float | None = None) -> Result:
 
 def run_pipeline(mkv: Path, downbeat: float | None = None) -> dict:
     """Chaîne complète -> métriques en dict JSON."""
-    return json.loads(json.dumps(run_result(mkv, downbeat).metrics, default=float))
+    return json.loads(json.dumps(run_result(mkv, downbeat).metrics))
 
 
 def make_take(path: Path, count_in: bool = True, guitar_silent: bool = False) -> None:

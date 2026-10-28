@@ -48,7 +48,11 @@ class Chord:
 
 
 def parse_grid(grid, beats_per_bar):
+    if beats_per_bar < 1:
+        raise UsageError(f"--beats-per-bar doit être au moins 1 (reçu : {beats_per_bar}).")
     bars = [b.split() for b in grid.split('|') if b.strip()]
+    if not bars:
+        raise UsageError("Grille vide : donner au moins une mesure (ex. \"C7|F7\").")
     beat_chords = []
     for b in bars:
         chords = [Chord(s) for s in b]

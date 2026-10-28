@@ -27,6 +27,5 @@ build-backend = "uv_build"
 
 [tool.pytest.ini_options]
 filterwarnings = [
-    # Avertissement tiers (numba/librosa) émis par pyin sur entrée silencieuse
-    "ignore:invalid value encountered in cast:RuntimeWarning",
+    "error",
 ]

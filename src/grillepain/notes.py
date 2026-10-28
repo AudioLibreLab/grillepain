@@ -1,4 +1,5 @@
 """Détection des notes de la guitare (pyin + onsets)."""
+import warnings
 from dataclasses import dataclass
 
 import librosa
@@ -17,7 +18,10 @@ class Note:
 
 def detect_notes(guitar, min_db=-40):
     hop = 256
-    f0, voiced, _ = librosa.pyin(guitar, fmin=75, fmax=1400, sr=SR, frame_length=2048, hop_length=hop)
+    with warnings.catch_warnings():
+        # avertissement tiers (numba/librosa) sur entrée silencieuse
+        warnings.filterwarnings("ignore", message="invalid value encountered in cast", category=RuntimeWarning)
+        f0, voiced, _ = librosa.pyin(guitar, fmin=75, fmax=1400, sr=SR, frame_length=2048, hop_length=hop)
     t = np.arange(len(f0)) * hop / SR
     midi = 69 + 12 * np.log2(f0 / 440.0)
     onsets = librosa.onset.onset_detect(y=guitar, sr=SR, hop_length=hop, units='time')

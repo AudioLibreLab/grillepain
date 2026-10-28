@@ -24,11 +24,11 @@ grillepain analyse prise.mkv --grid "C7|F7|C7|C7|F7|F7|C7|A7|Dm7|G7|C7 A7|Dm7 G7
 Options principales :
 
 - `--grid` : grille d'accords, mesures séparées par `|`
-- `--bpm` : tempo (sinon détecté)
+- `--bpm` : tempo approximatif, qui aide la détection (il n'est pas imposé ; sinon détecté)
 - `--downbeat` : temps 1 du 1er chorus, en secondes (sinon détecté)
 - `-o` : préfixe des fichiers de sortie (`<préfixe>_analyse.json`, `<préfixe>_analyse.md`)
-- `--quiet` : sortie réduite
-- `--guitar` / `--backing` : choisir les pistes audio de la guitare et de l'accompagnement
+- `--quiet` : ne pas afficher le Markdown sur la sortie standard
+- `--guitar` / `--backing` : deux fichiers audio séparés (guitare, accompagnement), utilisés uniquement sans .mkv
 
 Exemple de rapport : `examples/MySong_20261027_183119_analyse.md`.
 

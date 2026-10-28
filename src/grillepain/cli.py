@@ -5,7 +5,7 @@ from pathlib import Path
 
 from grillepain import __version__, pipeline
 from grillepain.audio import load_mkv, load_pair
-from grillepain.errors import GrillepainError
+from grillepain.errors import GrillepainError, InputError
 from grillepain.report import markdown
 from grillepain.theory import C_JAM_BLUES
 
@@ -33,6 +33,8 @@ def build_parser() -> argparse.ArgumentParser:
 def _analyse(ap: argparse.ArgumentParser, a: argparse.Namespace) -> int:
     if not a.mkv and not (a.guitar and a.backing):
         ap.error("donner un .mkv, ou --guitar et --backing")
+    if a.mkv and (a.guitar or a.backing):
+        ap.error("donner soit un .mkv, soit --guitar et --backing, pas les deux")
     print("Chargement…", file=sys.stderr)
     if a.mkv:
         tracks, src = load_mkv(a.mkv), a.mkv
@@ -41,8 +43,11 @@ def _analyse(ap: argparse.ArgumentParser, a: argparse.Namespace) -> int:
     result = pipeline.run(tracks, a.grid, a.beats_per_bar, a.bpm, a.downbeat, a.min_db, Path(src).name)
     prefix = a.out or str(Path(src).with_suffix(""))
     md = markdown.render(result)
-    Path(prefix + "_analyse.md").write_text(md, encoding="utf-8")
-    result.write_json(Path(prefix + "_analyse.json"))
+    try:
+        Path(prefix + "_analyse.md").write_text(md, encoding="utf-8")
+        result.write_json(Path(prefix + "_analyse.json"))
+    except OSError as e:
+        raise InputError(f"Écriture impossible : {e.filename} ({e.strerror})") from e
     if not a.quiet:
         print(md)
     print(f"→ {prefix}_analyse.md / .json", file=sys.stderr)

@@ -69,15 +69,23 @@ def _accord(symbole):
 
 def chord_backing(grid, bpm, beats_per_bar, start_s, choruses, count_in):
     beat = 60.0 / bpm
-    accords = [_accord(c) for c in grid.split("|")]
-    n_beats = len(accords) * beats_per_bar * choruses
+    # un accord par temps, comme parse_grid (plusieurs accords par mesure : partage égal)
+    accords = []
+    for mesure in grid.split("|"):
+        syms = mesure.split()
+        accords += [_accord(syms[i * len(syms) // beats_per_bar]) for i in range(beats_per_bar)]
+    n_beats = len(accords) * choruses
     y = np.zeros(int(round((start_s + n_beats * beat + 1.0) * SR)))
     for b in range(n_beats):
-        root, ivs = accords[(b // beats_per_bar) % len(accords)]
+        root, ivs = accords[b % len(accords)]
         t0 = start_s + b * beat
         _mix(y, _pluck(36 + root, beat, 1.0), t0)  # basse, octave 2
-        if b % beats_per_bar == 0:  # accord tenu sur toute la mesure
-            d = beat * beats_per_bar
+        if b == 0 or accords[b % len(accords)] != accords[(b - 1) % len(accords)]:
+            # accord tenu jusqu'au prochain changement
+            n = 1
+            while n < len(accords) and accords[(b + n) % len(accords)] == accords[b % len(accords)] and b + n < n_beats:
+                n += 1
+            d = beat * n
             t = np.arange(int(round(d * SR))) / SR
             env = np.minimum(t / 0.02, 1) * np.minimum((d - t) / 0.05, 1)
             for iv in ivs:

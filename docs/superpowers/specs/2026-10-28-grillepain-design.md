@@ -127,9 +127,17 @@ d'un temps fausse toute l'analyse. Méthodes, par ordre de priorité :
 3. **Ajustement harmonique** : chroma du backing synchronisé sur les temps, corrélé à la grille
    pour chaque décalage possible ; on garde le meilleur.
 
+**Indices de batterie (cymbales)**, combinés à l'ajustement harmonique, jamais seuls (un
+backing peut ne pas en avoir) :
+- *Crash* : attaque forte au-dessus de ~5 kHz suivie d'une longue décroissance ; tombe
+  souvent sur le temps 1 d'un début de chorus ou de section. Bonus aux décalages qui placent
+  les crashs sur la mesure 1 (ou un début de section).
+- *Charleston au pied / backbeat* : accents aigus courts sur les temps 2 et 4 ; tranche
+  l'ambiguïté temps 1 / temps 2 (erreur de phase la plus fréquente).
+
 **Score de confiance** (0–1, plus une étiquette haute/moyenne/faible) calculé à partir de :
-la marge entre le meilleur et le 2e décalage, la stabilité du tempo, l'accord entre décompte
-et ajustement harmonique quand les deux existent. Le rapport l'affiche en tête ; en confiance
+la marge entre le meilleur et le 2e décalage, la stabilité du tempo, l'accord entre décompte,
+ajustement harmonique et indices de cymbales quand ils existent. Le rapport l'affiche en tête ; en confiance
 faible, il met un avertissement visible et propose `grillepain check`.
 
 **`grillepain check prise.mkv`** : exporte `prise_check.wav` = backing + un clic aigu au
@@ -232,7 +240,7 @@ concret et exercice), triées par écart à l'objectif. Exemple : guide tones < 
 2. `Result` + JSON versionné + codes retour (branchement JamCapture possible).
 3. Grilles YAML (3 standards) + `grillepain tunes`.
 4. **Boucle d'amélioration** : `grillepain eval` sur les vraies prises.
-5. Calage robuste : score de confiance, `grillepain check`, `--shift`.
+5. Calage robuste : indices de cymbales, score de confiance, `grillepain check`, `--shift`.
 6. Métriques « sentir la grille » + `advice.py`.
 7. Historique SQLite + comparaison N / N-1.
 8. Rapport HTML.

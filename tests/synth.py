@@ -53,7 +53,9 @@ def pluck(midi, dur_s):
 def melody(notes, dur_s):
     y = np.zeros(int(round(dur_s * SR)))
     for t, d, midi in notes:
-        _mix(y, _pluck(midi, d), t)
+        x = _pluck(midi, d)
+        x *= np.minimum(np.arange(len(x), 0, -1) / (0.05 * SR), 1)  # relâchement 50 ms (évite l'onset parasite de la coupure)
+        _mix(y, x, t)
     return _norm(y)
 
 

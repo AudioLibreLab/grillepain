@@ -28,7 +28,7 @@ Options principales :
 - `--grid` : grille d'accords, mesures séparées par `|`
 - `--bpm` : tempo (sinon détecté)
 - `--downbeat` : temps 1 du 1er chorus, en secondes (sinon détecté)
-- `-o` : préfixe des fichiers de sortie (`<préfixe>.json`, `<préfixe>_analyse.md`)
+- `-o` : préfixe des fichiers de sortie (`<préfixe>_analyse.json`, `<préfixe>_analyse.md`)
 - `--quiet` : sortie réduite
 - `--guitar` / `--backing` : choisir les pistes audio de la guitare et de l'accompagnement
 

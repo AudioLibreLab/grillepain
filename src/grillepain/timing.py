@@ -86,6 +86,8 @@ def fit_form(backing, beat_frames, all_beats, beat_chords):
         scores.append(np.mean(np.sum(T[idx] * cs[:, :nb].T, axis=1)))
     scores = np.array(scores)
     best = int(np.argmax(scores))
+    if L < 2:  # un seul décalage possible : aucune information sur le temps 1
+        return best + first, 0.0
     second = np.sort(scores)[-2]
     margin = (scores[best] - second) / (np.std(scores) + 1e-9)
     return best + first, margin

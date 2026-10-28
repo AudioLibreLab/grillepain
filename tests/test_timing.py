@@ -54,3 +54,10 @@ def test_method_id():
     _, beats = parse_grid(C_JAM_BLUES, 4)
     assert align(y, beats, 120, None).method_id == "count_in"
     assert align(y, beats, 120, 2.0).method_id == "downbeat_arg"
+
+
+def test_harmonic_fit_single_beat_grid():
+    y = synth.chord_backing("C7", bpm=120, beats_per_bar=1, start_s=1.0, choruses=16, count_in=False)
+    _, beats = parse_grid("C7", 1)
+    a = align(y, beats, bpm_hint=120, downbeat_s=None)
+    assert a.method_id == "harmonic" and a.confidence == "faible"

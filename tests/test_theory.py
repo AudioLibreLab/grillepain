@@ -32,3 +32,8 @@ def test_blues_grid():
 def test_bad_grid_or_meter(grid, bpb):
     with pytest.raises(UsageError):
         parse_grid(grid, bpb)
+
+
+@pytest.mark.parametrize("sym,root", [("Cb7", 11), ("Fbmaj7", 4), ("E#7", 5), ("B#7", 0)])
+def test_enharmonic_roots(sym, root):
+    assert Chord(sym).root == root

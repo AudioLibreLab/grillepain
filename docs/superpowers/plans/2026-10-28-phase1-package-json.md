@@ -516,3 +516,25 @@ def test_low_confidence_exit_3(tmp_path, monkeypatch):
 - [ ] **Step 3:** Supprimer `solo_analyzer.py` ; README : installation (`uv tool install .`),
   usage `grillepain analyse prise.mkv`, tableau des codes retour, lien vers le schéma JSON.
 - [ ] **Step 4:** Commit `chore: bascule du prototype vers le package grillepain`.
+
+### Task 13: Corriger le décalage d'un temps de `fit_form` (ajouté en cours d'exécution)
+
+Découvert en Task 5 : `librosa.util.sync(..., pad=True)` ajoute un segment initial, donc la colonne
+chroma *i* couvre l'intervalle **précédant** le temps *i* ; l'ajustement harmonique choisit un
+décalage d'un temps de trop (vérifié sur audio synthétique : 1,53 s au lieu de 1,03 s).
+
+**Files:**
+- Modify: `src/grillepain/timing.py` (`fit_form`), `tests/test_timing.py`
+- Modify: `examples/MySong_20261027_183119_analyse.md` (régénéré), tests golden des Tasks 8 et 10
+
+- [ ] **Step 1:** Retirer le `xfail` de `test_harmonic_fit_without_count_in` ; il doit échouer.
+- [ ] **Step 2:** `fit_form` : `librosa.util.sync(ch, frames, aggregate=np.mean, pad=False)` et réaligner
+  l'indexation des colonnes (colonne *i* = temps *i* … *i+1*).
+- [ ] **Step 3:** `uv run pytest tests/test_timing.py -v` → PASS.
+- [ ] **Step 4:** Relancer `grillepain analyse` sur la prise d'exemple ; comparer avec l'ancien rapport
+  (temps 1, confiance, arrivées) et consigner l'écart dans le rapport de tâche. Mettre à jour
+  `examples/MySong_20261027_183119_analyse.md` ; les tests golden comparent désormais à ce nouveau
+  rapport (le JSON du prototype reste la référence des métriques **hors calage harmonique** : le
+  test golden des métriques passe `--downbeat` égal au temps 1 du prototype, 0.28 s).
+- [ ] **Step 5:** `uv run pytest -v -m "golden or not golden"` → PASS. Commit
+  `fix: fit_form décalé d'un temps (sync pad=True)`.

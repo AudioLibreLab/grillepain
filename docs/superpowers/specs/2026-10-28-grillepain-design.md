@@ -169,6 +169,27 @@ si c'est faux, il relance avec `--downbeat` ou `--shift ±N` (décalage en temps
 Les calages validés à l'oreille sont enregistrés (`history.py`, colonne
 `downbeat_verified`) et forment le **corpus de référence** de §9.
 
+### Sources de backing et précision attendue
+
+| | iReal Pro | Backing YouTube |
+|---|---|---|
+| Grille | exacte (export iReal) | à deviner : intro, réharmonisations, fin, tonalité |
+| Tempo | machine, constant | humain, peut dériver |
+| Temps 1 | décompte quasi systématique, basse propre sur la fondamentale | souvent sans décompte, mix compressé, basse noyée |
+| Forme | nombre de chorus connu | intro / solos / fin de longueur variable |
+
+- iReal est la source recommandée pour le travail : calage attendu en confiance haute.
+- YouTube reste supporté : `timing.py` doit tolérer une dérive de tempo (suivi des temps
+  local, pas un tempo unique), et le rapport recommande `grillepain check` plus souvent.
+- Le type de source (`ireal` / `youtube` / `autre`) est déduit du nom de piste quand c'est
+  possible, ou donné par `--source`, et enregistré dans le JSON et l'historique pour
+  comparer des prises comparables.
+
+**Évolution possible (hors périmètre initial)** : backing = audio exporté par iReal, avec
+l'export MIDI du même morceau au même tempo. Le MIDI donne accords, basse et temps exacts :
+il suffit de caler une fois l'audio sur le MIDI (corrélation d'attaques) pour un temps 1
+sans estimation. Inutile si l'on joue en direct par-dessus iReal (départ non synchronisé).
+
 ## 6. Métriques « sentir la grille »
 
 Calculées sur `PlacedNote[]` et la segmentation en **phrases** (une phrase = notes séparées

@@ -110,8 +110,14 @@ sections:             # optionnel, pour les métriques de forme
 
 - Accords sur 2 temps : `C7 A7` dans une mesure de 4/4 → 2 temps chacun. Partage explicite
   possible : `C7:3 A7:1`.
-- Grilles fournies : C Jam Blues, Autumn Leaves, Blue Bossa. `--grid "C7|F7|…"` reste
-  accepté (grille ad hoc).
+- Grilles fournies : C Jam Blues, Autumn Leaves, Blue Bossa.
+- L'utilisateur fournit la grille de trois façons :
+  - `--tune <nom>` : cherché dans `~/.config/grillepain/tunes/` puis dans les grilles
+    fournies (une grille perso du même nom l'emporte) ;
+  - `--tune ./ma-grille.yaml` : chemin direct vers un fichier YAML ;
+  - `--grid "C7|F7|…"` : grille ad hoc en ligne de commande (4/4, sans intro).
+- Une grille invalide (accord inconnu, mesure vide, partage qui ne tombe pas juste) donne
+  un message clair avec le numéro de mesure, code retour 2.
 - `grillepain tunes` liste les grilles disponibles.
 - `sections` par défaut pour un blues de 12 mesures : phrases 1/5/9, turnaround 11-12.
   Pour les formes AABA / 32 mesures : sections A/B et turnaround = 2 dernières mesures.
